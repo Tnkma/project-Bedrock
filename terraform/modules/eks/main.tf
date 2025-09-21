@@ -46,5 +46,28 @@ module "eks" {
       }
     }
   }
+  # This allows the nodes to talk to the cluster control plane
+    cluster_security_group_additional_rules = {
+      nodes_to_cluster = {
+        description = "Allow nodes to communicate with the cluster"
+        protocol    = "-1" # -1 means all protocols
+        from_port   = 0
+        to_port     = 0
+        type        = "ingress"
+        source_node_security_group = true
+      }
+    }
+
+    # This allows the cluster control plane to talk to the nodes
+    node_security_group_additional_rules = {
+      cluster_to_nodes = {
+        description = "Allow cluster to communicate with the nodes"
+        protocol    = "-1"
+        from_port   = 0
+        to_port     = 0
+        type        = "ingress"
+        source_cluster_security_group = true
+      }
+    }
 }
 
