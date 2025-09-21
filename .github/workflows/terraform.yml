@@ -1,0 +1,56 @@
+name: "Terraform CI/CD for project Bedrock"
+
+# This workflow will run on pushes and pull requests targeting different branches
+on:
+  push:
+    branches:
+        - main
+        - 'feature/**'
+  pull_request:
+
+jobs:
+    terraform:
+        name: "Terraform Plan and Apply"
+        runs-on: ubuntu-latest
+
+        steps:
+            # Checkout the repository code
+            - name: "Checkout Repository"
+              uses: actions/checkout@v4
+            
+            # Configure AWS credentials
+            - name: "Configure AWS Credentials"
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: us-east-1
+                
+            # Setup Terraform
+            - name: "Setup Terraform"
+              uses: hashicorp/setup-terraform@v3
+
+            # Initialize Terraform
+            - name: "Terraform Init"
+              run: terraform init
+              working-directory: ./terraform
+
+            # Validate Terraform configuration
+            - name: "Terraform Validate"
+              run: terraform validate
+              working-directory: ./terraform
+            
+            # Run Terraform Plan on feature branches and main branch
+            # This step will execute on all branches
+            - name: "Terraform Plan"
+              id: plan
+              run: terraform plan -no-color
+              working-directory: ./terraform
+
+
+            # Run Terraform Apply only on main branch
+            # This step will only execute if the event is a push to the main branch
+            - name: "Terraform Apply"
+              if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+              run: terraform apply -auto-approve -no-color
+              working-directory: ./terraform
