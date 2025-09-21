@@ -1,0 +1,3 @@
+[submodule "retail-store-sample-app"]
+	path = retail-store-sample-app
+	url = https://github.com/aws-containers/retail-store-sample-app.git
