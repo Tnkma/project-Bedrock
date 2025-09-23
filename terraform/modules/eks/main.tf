@@ -5,7 +5,21 @@ module "eks" {
   name    = var.cluster_name
   kubernetes_version = var.cluster_version
 
+
+  addons = {
+    coredns                = {}
+    eks-pod-identity-agent = {
+      before_compute = true
+    }
+    kube-proxy             = {}
+    vpc-cni                = {
+      before_compute = true
+    }
+  }
+
   endpoint_public_access = true
+  # Adds the current caller identity as an administrator via cluster access entry
+  enable_cluster_creator_admin_permissions = true
 
   vpc_id     = var.vpc_id
   subnet_ids = var.subnet_ids
@@ -14,7 +28,7 @@ module "eks" {
   eks_managed_node_groups = {
     eks_nodes = {
       ami_type       = "AL2023_x86_64_STANDARD"
-      desired_size = 1
+      desired_size = 2
       max_size     = 3
       min_size     = 1
 
@@ -46,28 +60,4 @@ module "eks" {
       }
     }
   }
-  # This allows the nodes to talk to the cluster control plane
-    cluster_security_group_additional_rules = {
-      nodes_to_cluster = {
-        description = "Allow nodes to communicate with the cluster"
-        protocol    = "-1" # -1 means all protocols
-        from_port   = 0
-        to_port     = 0
-        type        = "ingress"
-        source_node_security_group = true
-      }
-    }
-
-    # This allows the cluster control plane to talk to the nodes
-    node_security_group_additional_rules = {
-      cluster_to_nodes = {
-        description = "Allow cluster to communicate with the nodes"
-        protocol    = "-1"
-        from_port   = 0
-        to_port     = 0
-        type        = "ingress"
-        source_cluster_security_group = true
-      }
-    }
 }
-
