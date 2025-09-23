@@ -23,9 +23,33 @@ module "eks" {
     subnet_ids     = module.vpc.private_subnet_ids
     developer_user_arn = aws_iam_user.developer.arn
 }
+
+data "aws_eks_cluster" "this" {
+  name = module.eks.cluster_name
+}
+
+# --- Defines the dev-user and their AWS-level permissions ---
 resource "aws_iam_user" "developer" {
   name = "dev-user"
   tags = {
     Project = "Bedrock"
   }
+}
+resource "aws_iam_policy" "developer_eks_describe" {
+  name   = "EKS-DescribeCluster-Policy"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action   = ["eks:DescribeCluster"]
+        Effect   = "Allow"
+        Resource = data.aws_eks_cluster.this.arn
+      },
+    ]
+  })
+}
+
+resource "aws_iam_user_policy_attachment" "developer_attach" {
+  user       = aws_iam_user.developer.name
+  policy_arn = aws_iam_policy.developer_eks_describe.arn
 }
