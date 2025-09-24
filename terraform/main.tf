@@ -65,7 +65,7 @@ resource "aws_iam_user_policy_attachment" "developer_attach" {
       region = var.region
   
      vpc_id         = module.vpc.vpc_id
-     subnet_ids     = concat(module.vpc.private_subnets, module.vpc.public_subnets)
+     subnet_ids     = module.vpc.private_subnets
      developer_user_arn = aws_iam_user.developer.arn
  }
 
