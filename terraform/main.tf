@@ -40,7 +40,12 @@ resource "aws_iam_policy" "developer_eks_describe" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action   = ["eks:DescribeCluster"]
+        Action   = [
+          "eks:DescribeCluster",
+          "eks:ListClusters",
+          "eks:ListNodegroups"
+
+        ]
         Effect   = "Allow"
         Resource = module.eks.cluster_arn
       },
@@ -60,7 +65,7 @@ resource "aws_iam_user_policy_attachment" "developer_attach" {
       region = var.region
   
      vpc_id         = module.vpc.vpc_id
-     subnet_ids     = module.vpc.private_subnet_ids
+     subnet_ids     = module.vpc.private_subnet_ids + module.vpc.public_subnet_ids
      developer_user_arn = aws_iam_user.developer.arn
  } 
 

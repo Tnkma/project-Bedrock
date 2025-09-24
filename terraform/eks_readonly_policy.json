@@ -1,0 +1,20 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "eks:ListClusters",
+                "eks:DescribeCluster",
+                "eks:ListUpdates",
+                "eks:DescribeUpdate",
+                "eks:ListFargateProfiles",
+                "eks:DescribeFargateProfile",
+                "eks:ListNodegroups",
+                "eks:DescribeNodegroup"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
