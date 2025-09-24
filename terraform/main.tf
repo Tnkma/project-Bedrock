@@ -54,8 +54,10 @@ resource "aws_iam_policy" "developer_eks_describe" {
     ]
   })
 }
-
+# Attaches and detaches the above policy to the developer IAM user so we can clean properly
 resource "aws_iam_user_policy_attachment" "developer_attach" {
   user       = aws_iam_user.developer.name
   policy_arn = aws_iam_policy.developer_eks_describe.arn
+
+  depends_on = [aws_iam_policy.developer_eks_describe]
 }
