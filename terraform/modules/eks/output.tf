@@ -10,3 +10,7 @@ output "cluster_endpoint" {
   description = "EKS cluster endpoint for API access"
   value       = module.eks.cluster_endpoint
 }
+output "cluster_arn" {
+  description = " The Amazon Resource Name (ARN) of the EKS cluster"
+  value       = module.eks.cluster_arn
+}

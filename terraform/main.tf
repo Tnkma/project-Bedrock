@@ -24,10 +24,6 @@ module "eks" {
     developer_user_arn = aws_iam_user.developer.arn
 }
 
-data "aws_eks_cluster" "this" {
-  name = module.eks.cluster_name
-}
-
 # --- Defines the dev-user and their AWS-level permissions ---
 resource "aws_iam_user" "developer" {
   name = "dev-user"
@@ -43,7 +39,7 @@ resource "aws_iam_policy" "developer_eks_describe" {
       {
         Action   = ["eks:DescribeCluster"]
         Effect   = "Allow"
-        Resource = data.aws_eks_cluster.this.arn
+        Resource = module.eks.cluster_arn
       },
     ]
   })
