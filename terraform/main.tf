@@ -24,14 +24,7 @@ module "vpc" {
     source = "./modules/vpc"
     region = var.region
 }
-module "eks" {
-    source = "./modules/eks"
-    region = var.region
 
-    vpc_id         = module.vpc.vpc_id
-    subnet_ids     = module.vpc.private_subnet_ids
-    developer_user_arn = var.developer_user_arn
-}
 
 # --- Defines the dev-user and their AWS-level permissions ---
 resource "aws_iam_user" "developer" {
@@ -61,3 +54,13 @@ resource "aws_iam_user_policy_attachment" "developer_attach" {
 
   depends_on = [aws_iam_policy.developer_eks_describe]
 }
+
+  module "eks" {
+      source = "./modules/eks"
+      region = var.region
+  
+     vpc_id         = module.vpc.vpc_id
+     subnet_ids     = module.vpc.private_subnet_ids
+     developer_user_arn = aws_iam_user.developer.arn
+ } 
+

@@ -31,9 +31,30 @@ jobs:
             - name: "Setup Terraform"
               uses: hashicorp/setup-terraform@v3
 
+            # Force unlock stale Terraform lock with retries- name: "Force unlock stale Terraform lock with retries"
+            - name: "Force unlock stale Terraform lock with retries"
+              run: |
+                LOCK_ID=$(aws dynamodb scan \
+                  --table-name terraform-locks \
+                  --query "Items[?contains(LockID.S, 'terraform.tfstate')].LockID.S" \
+                  --output text)
+                if [ -n "$LOCK_ID" ]; then
+                  echo "Found stale lock: $LOCK_ID, attempting to unlock..."
+                  for i in {1..3}; do
+                    echo "Attempt $i..."
+                    terraform force-unlock -force $LOCK_ID && break
+                    echo "Retrying in 5 seconds..."
+                    sleep 5
+                  done
+                  echo "Unlock attempt finished."
+                else
+                  echo "No stale lock found."
+                fi
+              working-directory: ./terraform
+
             # Initialize Terraform
             - name: "Terraform Init"
-              run: terraform init
+              run: terraform init -reconfigure
               working-directory: ./terraform
 
             # Validate Terraform configuration
