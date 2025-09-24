@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket         = "bedrock-terraform-tfstate"
-    key            = "project-bedrock/terraform.tfstate"
+    key            = "terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform-locks"
     encrypt        = true
@@ -30,12 +30,13 @@ module "eks" {
 
     vpc_id         = module.vpc.vpc_id
     subnet_ids     = module.vpc.private_subnet_ids
-    developer_user_arn = aws_iam_user.developer.arn
+    developer_user_arn = var.developer_user_arn
 }
 
 # --- Defines the dev-user and their AWS-level permissions ---
 resource "aws_iam_user" "developer" {
   name = "dev-user"
+  force_destroy = true
   tags = {
     Project = "Bedrock"
   }

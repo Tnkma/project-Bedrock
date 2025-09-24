@@ -9,3 +9,7 @@ variable "environment_name" {
     type        = string
     default     = "innovatemart"
 }
+variable "developer_user_arn" {
+  description = "ARN of the developer IAM user"
+  type        = string
+}
