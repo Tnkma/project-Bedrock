@@ -10,7 +10,7 @@ on:
 
 jobs:
     terraform:
-        name: "Terraform Plan and Apply"
+        name: "Terraform Plan and Apply job"
         runs-on: ubuntu-latest
 
         steps:
@@ -51,6 +51,6 @@ jobs:
             # Run Terraform Apply only on main branch
             # This step will only execute if the event is a push to the main branch
             - name: "Terraform Apply"
-              if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+              if: github.ref == 'refs/heads/main'
               run: terraform apply -auto-approve -no-color
               working-directory: ./terraform
