@@ -20,7 +20,7 @@ resource "aws_db_instance" "orders" {
 resource "aws_db_instance" "catalog" {
   identifier           = "catalog-db-instance"
   engine               = "postgres"
-  engine_version       = "15.5"
+  engine_version       = "14.1"
   instance_class       = "db.t3.micro"
   allocated_storage    = 10
   db_name              = "catalog_db"
