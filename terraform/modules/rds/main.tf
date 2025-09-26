@@ -26,12 +26,13 @@ resource "aws_db_instance" "catalog" {
   db_name              = "catalog_db"
   username             = var.postgresql_username
   password             = var.postgresql_password
-  parameter_group_name = "default.postgres12"
+  parameter_group_name = "default.postgres14" 
   skip_final_snapshot  = true
 
   vpc_security_group_ids = [aws_security_group.db_sg.id]
   db_subnet_group_name   = aws_db_subnet_group.main.name
 }
+
 
 
 
