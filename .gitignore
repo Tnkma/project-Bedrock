@@ -4,3 +4,8 @@
 **/*.tfstate.*
 **/.terraform.lock.hcl
 **/*.tfvars
+kubeval  
+kubeval-linux-amd64.tar.gz  
+LICENSE
+validate-yaml.sh
+
