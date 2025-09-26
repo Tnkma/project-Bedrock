@@ -40,10 +40,10 @@ resource "aws_db_instance" "catalog" {
 resource "aws_dynamodb_table" "carts" {
   name         = "carts-table"
   billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "cartId"
+  hash_key     = "id"
 
   attribute {
-    name = "cartId"
+    name = "id"
     type = "S"
   }
 
