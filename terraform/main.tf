@@ -69,4 +69,17 @@ resource "aws_iam_user_policy_attachment" "developer_attach" {
      developer_user_arn = aws_iam_user.developer.arn
  }
 
+module "rds" {
+  source = "./modules/rds"
+
+  mysql_username      = var.mysql_username
+  mysql_password      = var.mysql_password
+  postgresql_username = var.postgresql_username
+  postgresql_password = var.postgresql_password
+
+  vpc_id         = module.vpc.vpc_id
+  private_subnets = module.vpc.private_subnets
+
+  eks_node_sg_id = module.eks.node_security_group_id
+}
 

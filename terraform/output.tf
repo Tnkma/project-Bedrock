@@ -26,4 +26,21 @@ output "eks_cluster_endpoint" {
   value       = module.eks.cluster_endpoint
 }
 
+output "orders_db_endpoint" {
+  value = module.rds.orders_db_endpoint
+}
+
+output "catalog_db_endpoint" {
+  value = module.rds.catalog_db_endpoint
+}
+
+output "carts_table_name" {
+  value = module.rds.carts_table_name
+}
+
+output "carts_dynamodb_policy_arn" {
+  value = module.rds.carts_dynamodb_policy_arn
+}
+
+
 
