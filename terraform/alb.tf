@@ -74,6 +74,7 @@ resource "aws_lb_listener" "https" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.ui.arn
   }
+  depends_on = [aws_lb_target_group.ui]
 }
 
 # This resource automatically registers EKS nodes with the target group
