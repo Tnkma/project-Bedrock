@@ -38,7 +38,7 @@ resource "aws_lb" "main" {
 
 resource "aws_lb_target_group" "ui" {
   name     = "innovatemart-ui-tg"
-  port     = 30187 
+  port     = 30931
   protocol = "HTTP"
   vpc_id   = module.vpc.vpc_id
   target_type = "instance"
